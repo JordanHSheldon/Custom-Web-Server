@@ -1,41 +1,10 @@
-// rustc main.rs <-- compile
-// ./main        <-- Execute
+use std::net::TcpListener;
 
-// struct representing backend server
-struct Backend {
-    active: bool
-}
-
-// type representing all the backend servers available
-struct Backends {
-    count: u16,
-    backends: Vec<Backend>
-}
-
-impl Backends {
-    fn add_server(&mut self,server: Backend) {
-        self.backends.push(server);
-        self.count+=1;
+fn main(){
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    println!("Starting server on: 127.0.0.1:7878");
+    for stream in listener.incoming() {
+        let _stream = stream.unwrap();
+        println!("Connected!")
     }
-
-    fn remove_server(&mut self){
-        self.backends.pop();
-        self.count-=1;
-    }
-}
-
-fn main() {
-    let new_backend = Backend{active:true};
-    let mut backend_servers = Backends{
-        backends: Vec::<Backend>::new(),
-        count: 0
-    };
-    
-    backend_servers.add_server(new_backend);
-
-   println!("{} server('s)", backend_servers.count);
-
-   backend_servers.remove_server();
-
-   println!("{} server('s)", backend_servers.count);
 }
